@@ -1,0 +1,15 @@
+{
+  "name": "随身异议",
+  "short_name": "随身异议",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "随时随地——異議あり！",
+  "icons": [
+    {
+      "src": "img/badge.png",
+      "sizes": "220x220",
+      "type": "image/png"
+    }
+  ]
+}
