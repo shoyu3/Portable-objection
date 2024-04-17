@@ -1,0 +1,272 @@
+html,
+body,
+#main {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
+}
+
+datalist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    writing-mode: vertical-lr;
+    width: 350px;
+}
+
+option {
+    padding: 0;
+    transform: rotate(270deg);
+}
+
+input[type="range"] {
+    width: 350px;
+    margin: 0;
+}
+
+select {
+    height: 30px;
+}
+
+a{
+    color:#00B0FF;
+    text-decoration: none;
+}
+button{
+    border: 2px solid #00B0FF;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    margin-top: -7%;
+}
+
+#title-div {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 100;
+}
+
+#obje-div {
+    height: 400px;
+    width: 100%;
+    /* z-index: -1; */
+}
+
+#obje-div>img {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    top: -10px;
+    left: 0;
+}
+
+#panel1 {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    z-index: 101;
+}
+
+.hide {
+    display: none !important;
+}
+
+.hide2 {
+    /* display: none !important; */
+    opacity: 0;
+    transition: all .5s;
+}
+
+.hidecur {
+    cursor: none;
+}
+
+.shake {
+    animation: shake 300ms ease-in-out;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-2px, 2px, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(4px, -4px, 0);
+    }
+
+    30%,
+    70% {
+        transform: translate3d(-8px, 8px, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(6px, -6px, 0);
+    }
+
+    50% {
+        transform: translate3d(-8px, 8px, 0);
+    }
+
+    45%,
+    55% {
+        transform: translate3d(4px, 4px, 0);
+    }
+
+    35%,
+    65% {
+        transform: translate3d(-6px, -6px, 0);
+    }
+
+    25%,
+    75% {
+        transform: translate3d(10px, 10px, 0);
+    }
+
+    15%,
+    85% {
+        transform: translate3d(-8px, -8px, 0);
+    }
+}
+
+/* 旧动画 */
+/* @keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, +1px, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(+3px, -3px, 0);
+    }
+
+    30%,
+    70% {
+        transform: translate3d(-6px, +6px, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(+4px, -4px, 0);
+    }
+
+    50% {
+        transform: translate3d(-6px, +6px, 0);
+    }
+} */
+
+#btn2 {
+    height: 23px;
+}
+
+#character {
+    width: 100px;
+}
+
+#voicetype {
+    width: 100px;
+}
+
+meting-js {
+    position: relative;
+    z-index: 200;
+    opacity: 0.8;
+    width: 100%;
+    display: block;
+    height: 70px;
+    position: fixed;
+    bottom: 0;
+}
+
+.aplayer-lrc {
+    display: none !important;
+}
+
+.aplayer-pic {
+    opacity: 0.3;
+}
+
+
+
+/*[type="range"] {*/
+/*  -webkit-appearance: none;*/
+/*  appearance: none;*/
+/*  margin: 0;*/
+/*  outline: 0;*/
+/*  background-color: transparent;*/
+/*  width: 500px;*/
+/*}*/
+
+/* 定义range控件轨道的样式 */
+/*[type="range"]::-webkit-slider-runnable-track {*/
+/*  height: 4px;*/
+/*  background: #eee;*/
+/*}*/
+
+/* 定义range控件容器的样式 */
+/*[type="range" i]::-webkit-slider-container {*/
+/*  height: 20px;*/
+/*  overflow: hidden;*/
+/*}*/
+
+/* 定义range控件拇指的样式 */
+/*[type="range"]::-webkit-slider-thumb {*/
+/*  -webkit-appearance: none;*/
+/*  appearance: none;*/
+/*  width: 20px;*/
+/*  height: 20px;*/
+/*  border-radius: 50%;*/
+/*  background-color: #00B0FF;*/
+/*  border: 1px solid transparent;*/
+/*  margin-top: -6px;*/
+  /* 使用border-image属性给拇指添加渐变边框 */
+/*  border-image: linear-gradient(#00B0FF, #00B0FF) 0 fill / 8 20 8 0 / 0px 0px 0 2000px;*/
+/*}*/
+
+[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    outline: 0;
+    background-color: transparent;
+    width: 500px;
+}
+[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background: #eee;
+}
+[type="range" i]::-webkit-slider-container {
+    height: 18px;
+    overflow: hidden;
+}
+[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #00B0FF;
+    border: 1px solid transparent;
+    margin-top: -7px;
+    border-image: linear-gradient(#00B0FF,#00B0FF) 0 fill / 8 20 8 0 / 0px 0px 0 2000px;
+}
+
+#tickmarks{
+    margin-top: -8px;
+}
+}
