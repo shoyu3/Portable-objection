@@ -142,7 +142,7 @@ function downloadAndCacheMP3(filename,pl=false) {
     fetch(filename)
         .then(response => {
             const contentType = response.headers.get('Content-Type');
-            if (contentType && contentType.startsWith('audio/mpeg')) {
+            if (contentType && (contentType.startsWith('audio/mpeg') || contentType.startsWith('audio/mp3'))) {
                 return response.blob();
             } else {
                 document.getElementById("cacheok").innerHTML = "❌";
