@@ -113,7 +113,14 @@ try {
     document.getElementById("voicetype").value = selvol;
     document.getElementById("img1").src = "img/" + selvol + ".png";
     document.getElementById("cacheok").innerHTML = "💬";
-    downloadAndCacheMP3("sound/" + selchar + "/" + selvol + ".mp3");
+    let _filename ="sound/" + selchar + "/" + selvol + ".mp3";
+    let _mp3Key = `cachedMP3_${_filename}`;
+    let _cachedMP3 = localStorage.getItem(_mp3Key);
+    if (_cachedMP3) {
+        document.getElementById("cacheok").innerHTML = "✅";
+    }else{
+        downloadAndCacheMP3(filename);
+    }
 } catch (error) {console.warn(error);}
 onload = function () {
     if (!device.mobile()) {
@@ -313,7 +320,14 @@ document.getElementById("character").addEventListener("change", (e) => {
             }
         }
     }
-    downloadAndCacheMP3("sound/" + selchar + "/" + selvol + ".mp3");
+    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    let mp3Key = `cachedMP3_${filename}`;
+    let cachedMP3 = localStorage.getItem(mp3Key);
+    if (cachedMP3) {
+        document.getElementById("cacheok").innerHTML = "✅";
+    }else{
+        downloadAndCacheMP3(filename);
+    }
 });
 
 document.getElementById("voicetype").addEventListener("change", (e) => {
@@ -321,7 +335,14 @@ document.getElementById("voicetype").addEventListener("change", (e) => {
     localStorage.setItem("igiari_vol", selvol);
     document.getElementById("img1").src = "img/" + selvol + ".png";
     document.getElementById("cacheok").innerHTML = "💬";
-    downloadAndCacheMP3("sound/" + selchar + "/" + selvol + ".mp3");
+    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    let mp3Key = `cachedMP3_${filename}`;
+    let cachedMP3 = localStorage.getItem(mp3Key);
+    if (cachedMP3) {
+        document.getElementById("cacheok").innerHTML = "✅";
+    }else{
+        downloadAndCacheMP3(filename);
+    }
 });
 
 document.getElementById("automusic").addEventListener("change", (e) => {
