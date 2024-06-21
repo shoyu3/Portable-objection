@@ -88,7 +88,7 @@ document.getElementById("voicetype").value = selvol;
 var automusic = false;
 var touchtime = new Date().getTime();
 var mousemode = false;
-if (localStorage.getItem("igiari_hide") === "1" && !device.ios()) {
+if (sessionStorage.getItem("igiari_hide") === "1" && !device.ios()) {
     document.getElementById("title-div").classList.add("hide2");
     document.getElementById("panel1").classList.add("hide2");
     document.getElementById("9487616885").classList.add("hide2");
@@ -113,36 +113,38 @@ try {
     document.getElementById("voicetype").value = selvol;
     document.getElementById("img1").src = "img/" + selvol + ".png";
     document.getElementById("cacheok").innerHTML = "💬";
-    let _filename ="sound/" + selchar + "/" + selvol + ".mp3";
+    let _filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let _mp3Key = `cachedMP3_${_filename}`;
     let _cachedMP3 = localStorage.getItem(_mp3Key);
     if (_cachedMP3) {
         document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+    } else {
         downloadAndCacheMP3(filename);
     }
-} catch (error) {console.warn(error);}
+} catch (error) { console.warn(error); }
 onload = function () {
     if (!device.mobile()) {
         document.getElementById(
             "title1"
         ).innerHTML += `<p>桌面端点此 <button id="btn3">开始</button> 或按Ctrl+Shift+Z<p>`;
         document.getElementById("btn3").addEventListener("click", function () {
-            if (!mousemode) {
-                document.getElementById("btn3").innerHTML = "停止";
-                window.mousemode = true;
-                document.body.addEventListener("mousemove", objection);
-            } else {
-                document.getElementById("btn3").innerHTML = "开始";
-                window.mousemode = false;
-                document.body.classList.remove("hidecur");
-                document.body.removeEventListener("mousemove", objection);
+            if (checkIfVisible()) {
+                if (!mousemode) {
+                    document.getElementById("btn3").innerHTML = "停止";
+                    window.mousemode = true;
+                    document.body.addEventListener("mousemove", objection);
+                } else {
+                    document.getElementById("btn3").innerHTML = "开始";
+                    window.mousemode = false;
+                    document.body.classList.remove("hidecur");
+                    document.body.removeEventListener("mousemove", objection);
+                }
             }
         });
     }
 };
 
-function downloadAndCacheMP3(filename,pl=false) {
+function downloadAndCacheMP3(filename, pl = false) {
     // window.inob = true;
     document.getElementById("btn1").disabled = true;
     document.getElementById("cacheok").innerHTML = "🔄";
@@ -155,9 +157,9 @@ function downloadAndCacheMP3(filename,pl=false) {
                 document.getElementById("cacheok").innerHTML = "❌";
                 document.getElementById("btn1").disabled = false;
                 // window.inob = false;
-                setTimeout(function(){
+                setTimeout(function () {
                     alert("音频加载失败，请刷新页面重试");
-                },300);
+                }, 300);
             }
         })
         .then((blob) => {
@@ -169,7 +171,7 @@ function downloadAndCacheMP3(filename,pl=false) {
                 localStorage.setItem(mp3Key, base64data);
                 console.log(`${filename} cached successfully.`);
                 document.getElementById("cacheok").innerHTML = "✅";
-                if(pl){
+                if (pl) {
                     audio.src = base64data;
                     audio.play();
                     document.getElementById("cacheok").innerHTML = "✅";
@@ -182,9 +184,9 @@ function downloadAndCacheMP3(filename,pl=false) {
             console.error(`Error caching ${filename}:`, error);
             document.getElementById("btn1").disabled = false;
             // window.inob = false;
-            setTimeout(function(){
+            setTimeout(function () {
                 alert("音频加载失败，请刷新页面重试");
-            },300);
+            }, 300);
         });
 }
 
@@ -197,7 +199,7 @@ function playMP3(filename) {
         audio.play();
         document.getElementById("cacheok").innerHTML = "✅";
     } else {
-        downloadAndCacheMP3(filename,true);
+        downloadAndCacheMP3(filename, true);
     }
 }
 
@@ -230,7 +232,11 @@ if (device.ios()) {
     }
     document
         .getElementById("btn1")
-        .addEventListener("click", requestOrientationPermission);
+        .addEventListener("click", function () {
+            if (checkIfVisible()) {
+                requestOrientationPermission()
+            }
+        });
 } else {
     window.addEventListener("devicemotion", dm);
 }
@@ -258,16 +264,23 @@ function dm(event) {
     }
 }
 
+function checkIfVisible(className = "panel1") {
+    return !document.getElementById(className).classList.contains("hide2");
+}
+
+
 document.getElementById("btn1").addEventListener("click", function () {
-    objection();
+    if (checkIfVisible()) {
+        objection();
+    }
 });
 
 document.getElementById("btn2").addEventListener("click", function () {
-    amx = amy = amz = 0;
+    if (checkIfVisible()) { amx = amy = amz = 0; }
 });
 
 document.getElementById("btn3").addEventListener("click", function () {
-    if(confirm("确定要清空音频缓存吗？清空后需要重新加载音频")){
+    if (checkIfVisible() && confirm("确定要清空音频缓存吗？清空后需要重新加载音频")) {
         clearAudioCache();
         alert("清空完成！");
         document.getElementById("cacheok").innerHTML = "💬";
@@ -291,9 +304,23 @@ document.getElementById("obje-div").addEventListener("click", function () {
         if (
             [...document.getElementById("panel1").classList].includes("hide2")
         ) {
-            localStorage.setItem("igiari_hide", 1);
+            sessionStorage.setItem("igiari_hide", 1);
+            document.getElementById("character").disabled = true;
+            document.getElementById("voicetype").disabled = true;
+            document.getElementById("lmd").disabled = true;
+            document.getElementById("bilibili").style.pointerEvents = "none";
+            document.getElementById("github").style.pointerEvents = "none";
+            document.getAnimations("automusic").disabled = true;
+            document.getElementById("9487616885").style.pointerEvents = "none";
         } else {
-            localStorage.setItem("igiari_hide", 0);
+            sessionStorage.setItem("igiari_hide", 0);
+            document.getElementById("character").disabled = false;
+            document.getElementById("voicetype").disabled = false;
+            document.getElementById("lmd").disabled = false;
+            document.getElementById("bilibili").style.pointerEvents = "auto";
+            document.getElementById("github").style.pointerEvents = "auto";
+            document.getAnimations("automusiz").disabled = false;
+            document.getElementById("9487616885").style.pointerEvents = "auto";
         }
         // console.log("dblclick");
     } else {
@@ -320,12 +347,12 @@ document.getElementById("character").addEventListener("change", (e) => {
             }
         }
     }
-    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    let filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let mp3Key = `cachedMP3_${filename}`;
     let cachedMP3 = localStorage.getItem(mp3Key);
     if (cachedMP3) {
         document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+    } else {
         downloadAndCacheMP3(filename);
     }
 });
@@ -335,12 +362,12 @@ document.getElementById("voicetype").addEventListener("change", (e) => {
     localStorage.setItem("igiari_vol", selvol);
     document.getElementById("img1").src = "img/" + selvol + ".png";
     document.getElementById("cacheok").innerHTML = "💬";
-    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    let filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let mp3Key = `cachedMP3_${filename}`;
     let cachedMP3 = localStorage.getItem(mp3Key);
     if (cachedMP3) {
         document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+    } else {
         downloadAndCacheMP3(filename);
     }
 });
@@ -354,7 +381,7 @@ function objection() {
     if (!inob) {
         try {
             clearTimeout(timer1);
-        } catch (e) {}
+        } catch (e) { }
         window.inob = true;
         setTimeout(() => {
             document.getElementById("img1").classList.remove("hide");
@@ -367,7 +394,7 @@ function objection() {
             setTimeout(() => {
                 try {
                     document.querySelector(".aplayer-play").click();
-                } catch (e) {}
+                } catch (e) { }
             }, 600);
         }
         document.getElementById("btn1").disabled = true;
@@ -391,7 +418,7 @@ function objection() {
             }
             try {
                 clearTimeout(timer1);
-            } catch (e) {}
+            } catch (e) { }
         }, 1300);
     }
 }
