@@ -55,13 +55,51 @@ var charvol = {
         "holdit",
         "takethat",
     ],
-    ming: ["igiari", "objection", "yiyi"],
-    hao: ["igiari", "objection", "yiyi"],
-    godo: ["igiari", "objection", "yiyi"],
-    xiang: ["igiari", "objection", "fandui"],
-    yanei: ["igiari", "objection", "yiyi", "fandui"],
-    xun: ["igiari", "objection", "fandui"],
-    nayuta: ["igiari", "objection", "fandui"],
+    ming: [
+        "igiari",
+        "objection",
+        "yiyi"
+    ],
+    hao: [
+        "igiari",
+        "objection",
+        "yiyi"],
+    godo: [
+        "igiari",
+        "objection",
+        "yiyi"
+    ],
+    xiang: [
+        "igiari",
+        "objection",
+        "fandui"
+    ],
+    yanei: [
+        "igiari",
+        "objection",
+        "yiyi",
+        "fandui"
+    ],
+    xun: [
+        "igiari",
+        "damarina",
+        "objection",
+        "fandui",
+        "bizui"
+    ],
+    nayuta: [
+        "igiari",
+        "satora-ja",
+        "objection",
+        "fandui",
+        "satora-cn"
+    ],
+    garan: [
+        "igiari",
+        "hirehuse",
+        "fandui",
+        "guixia"
+    ],
 };
 let amx = 0;
 let amy = 0;
