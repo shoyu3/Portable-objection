@@ -55,6 +55,11 @@ var charvol = {
         "holdit",
         "takethat",
     ],
+    dhurke: [
+    "igiari",
+    "objection",
+    "fandui",
+    ],   
     ming: [
         "igiari",
         "objection",
