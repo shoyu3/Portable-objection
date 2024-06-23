@@ -89,6 +89,7 @@ var charvol = {
         "igiari",
         "damarina",
         "objection",
+        "silence",
         "fandui",
         "bizui"
     ],
@@ -96,12 +97,15 @@ var charvol = {
         "igiari",
         "satora-ja",
         "objection",
+        "satorha",
         "fandui",
         "satora-cn"
     ],
     garan: [
         "igiari",
         "hirehuse",
+        "objection",
+        "insolence",
         "fandui",
         "guixia"
     ],
