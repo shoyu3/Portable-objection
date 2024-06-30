@@ -67,10 +67,26 @@ let amx = 0;
 let amy = 0;
 let amz = 0;
 
-var lmd = localStorage.getItem("igiari_lmd") || 5;
-document.getElementById("lmd").value = lmd;
-let msg = lmd >= 20 ? "握紧设备！" : "平放于桌面";
-document.getElementById("lmdv").innerHTML = `[${Number(lmd).toFixed(
+const accuracy = document.getElementById("lmd");
+const testButton = document.getElementById("btn1");
+const resetButton = document.getElementById("btn2");
+const clearCacheButton = document.getElementById("btn3");
+const character = document.getElementById("character");
+const voiceType = document.getElementById("voicetype");
+const autoMusic = document.getElementById("automusic");
+const bilibiliLink = document.getElementById("bilibili");
+const githubLink = document.getElementById("github");
+const image = document.getElementById("img1");
+const titleDiv = document.getElementById("title-div");
+const audioPlayer = document.getElementById("9487616885");
+const dashboard = document.getElementById("panel1");
+const cacheOk = document.getElementById("cacheok");
+const sensOk = document.getElementById("sensok");
+
+var igiari_accuracy = localStorage.getItem("igiari_lmd") || 5;
+accuracy.value = accuracy;
+let msg = accuracy >= 20 ? "握紧设备！" : "平放于桌面";
+document.getElementById("lmdv").innerHTML = `[${Number(accuracy).toFixed(
     1
 )}]&nbsp;&nbsp;${msg}`;
 // document.getElementById("lmdv").innerHTML = lmd;
@@ -83,81 +99,83 @@ if (selchar === "igiari") {
 var selvol = localStorage.getItem("igiari_vol") || "igiari";
 document.getElementById("img1").src = "img/" + selvol + ".png";
 
-document.getElementById("character").value = selchar;
-document.getElementById("voicetype").value = selvol;
+character.value = selchar;
+voiceType.value = selvol;
 var automusic = false;
 var touchtime = new Date().getTime();
 var mousemode = false;
-if (localStorage.getItem("igiari_hide") === "1" && !device.ios()) {
-    document.getElementById("title-div").classList.add("hide2");
-    document.getElementById("panel1").classList.add("hide2");
-    document.getElementById("9487616885").classList.add("hide2");
+if (sessionStorage.getItem("igiari_hide") === "1" && !device.ios()) {
+    titleDiv.classList.add("hide2");
+    dashboard.classList.add("hide2");
+    audioPlayer.classList.add("hide2");
 } else {
-    document.getElementById("title-div").classList.remove("hide2");
-    document.getElementById("panel1").classList.remove("hide2");
-    document.getElementById("9487616885").classList.remove("hide2");
+    titleDiv.classList.remove("hide2");
+    dashboard.classList.remove("hide2");
+    audioPlayer.classList.remove("hide2");
 }
 
 try {
-    for (ele of document.getElementById("voicetype").options) {
+    for (ele of voiceType.options) {
         if (charvol[selchar].includes(ele.value)) {
             ele.disabled = false;
         } else {
             ele.disabled = true;
-            if (document.getElementById("voicetype").value === ele.value) {
+            if (voiceType.value === ele.value) {
                 selvol = charvol[selchar][0];
             }
         }
     }
     localStorage.setItem("igiari_vol", selvol);
-    document.getElementById("voicetype").value = selvol;
-    document.getElementById("img1").src = "img/" + selvol + ".png";
-    document.getElementById("cacheok").innerHTML = "💬";
-    let _filename ="sound/" + selchar + "/" + selvol + ".mp3";
+    voiceType.value = selvol;
+    image.src = "img/" + selvol + ".png";
+    cacheOk.innerHTML = "💬";
+    let _filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let _mp3Key = `cachedMP3_${_filename}`;
     let _cachedMP3 = localStorage.getItem(_mp3Key);
     if (_cachedMP3) {
-        document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+        cacheOk.innerHTML = "✅";
+    } else {
         downloadAndCacheMP3(filename);
     }
-} catch (error) {console.warn(error);}
+} catch (error) { console.warn(error); }
 onload = function () {
     if (!device.mobile()) {
         document.getElementById(
             "title1"
-        ).innerHTML += `<p>桌面端点此 <button id="btn3">开始</button> 或按Ctrl+Shift+Z<p>`;
-        document.getElementById("btn3").addEventListener("click", function () {
-            if (!mousemode) {
-                document.getElementById("btn3").innerHTML = "停止";
-                window.mousemode = true;
-                document.body.addEventListener("mousemove", objection);
-            } else {
-                document.getElementById("btn3").innerHTML = "开始";
-                window.mousemode = false;
-                document.body.classList.remove("hidecur");
-                document.body.removeEventListener("mousemove", objection);
+        ).innerHTML += `<p>桌面端点此 <button id="btn4">开始</button> 或按Ctrl+Shift+Z<p>`;
+        document.getElementById("btn4").addEventListener("click", function () {
+            if (checkIfVisible()) {
+                if (!mousemode) {
+                    this.innerHTML = "停止";
+                    window.mousemode = true;
+                    document.body.addEventListener("mousemove", objection);
+                } else {
+                    this.innerHTML = "开始";
+                    window.mousemode = false;
+                    document.body.classList.remove("hidecur");
+                    document.body.removeEventListener("mousemove", objection);
+                }
             }
         });
     }
 };
 
-function downloadAndCacheMP3(filename,pl=false) {
+function downloadAndCacheMP3(filename, pl = false) {
     // window.inob = true;
-    document.getElementById("btn1").disabled = true;
-    document.getElementById("cacheok").innerHTML = "🔄";
+    testButton.disabled = true;
+    cacheOk.innerHTML = "🔄";
     fetch(filename)
         .then(response => {
             const contentType = response.headers.get('Content-Type');
             if (contentType && (contentType.startsWith('audio/mpeg') || contentType.startsWith('audio/mp3'))) {
                 return response.blob();
             } else {
-                document.getElementById("cacheok").innerHTML = "❌";
-                document.getElementById("btn1").disabled = false;
+                cacheOk.innerHTML = "❌";
+                testButton.disabled = false;
                 // window.inob = false;
-                setTimeout(function(){
+                setTimeout(function () {
                     alert("音频加载失败，请刷新页面重试");
-                },300);
+                }, 300);
             }
         })
         .then((blob) => {
@@ -168,23 +186,23 @@ function downloadAndCacheMP3(filename,pl=false) {
                 const mp3Key = `cachedMP3_${filename}`;
                 localStorage.setItem(mp3Key, base64data);
                 console.log(`${filename} cached successfully.`);
-                document.getElementById("cacheok").innerHTML = "✅";
-                if(pl){
+                cacheOk.innerHTML = "✅";
+                if (pl) {
                     audio.src = base64data;
                     audio.play();
-                    document.getElementById("cacheok").innerHTML = "✅";
+                    cacheOk.innerHTML = "✅";
                 }
-                document.getElementById("btn1").disabled = false;
+                testButton.disabled = false;
                 // window.inob = false;
             };
         })
         .catch((error) => {
             console.error(`Error caching ${filename}:`, error);
-            document.getElementById("btn1").disabled = false;
+            testButton.disabled = false;
             // window.inob = false;
-            setTimeout(function(){
+            setTimeout(function () {
                 alert("音频加载失败，请刷新页面重试");
-            },300);
+            }, 300);
         });
 }
 
@@ -195,9 +213,9 @@ function playMP3(filename) {
     if (cachedMP3) {
         audio.src = cachedMP3;
         audio.play();
-        document.getElementById("cacheok").innerHTML = "✅";
+        cacheOk.innerHTML = "✅";
     } else {
-        downloadAndCacheMP3(filename,true);
+        downloadAndCacheMP3(filename, true);
     }
 }
 
@@ -228,15 +246,18 @@ if (device.ios()) {
             })
             .catch(console.error);
     }
-    document
-        .getElementById("btn1")
-        .addEventListener("click", requestOrientationPermission);
+    testButton
+        .addEventListener("click", function () {
+            if (checkIfVisible()) {
+                requestOrientationPermission()
+            }
+        });
 } else {
     window.addEventListener("devicemotion", dm);
 }
 
 function dm(event) {
-    document.getElementById("sensok").innerHTML = "✅";
+    sensOk.innerHTML = "✅";
     let acc = event.acceleration;
     accx = acc.x || 0;
     accy = acc.y || 0;
@@ -250,50 +271,71 @@ function dm(event) {
         2
     )}, ${amy.toFixed(2)}, ${amz.toFixed(2)}`;
     if (
-        Math.abs(accx) >= lmd ||
-        Math.abs(accy) >= lmd ||
-        Math.abs(accz) >= lmd
+        Math.abs(accx) >= accuracy ||
+        Math.abs(accy) >= accuracy ||
+        Math.abs(accz) >= accuracy
     ) {
         objection();
     }
 }
 
-document.getElementById("btn1").addEventListener("click", function () {
-    objection();
-});
+function checkIfVisible(htmlElement = dashboard) {
+    return !htmlElement.classList.contains("hide2");
+}
 
-document.getElementById("btn2").addEventListener("click", function () {
-    amx = amy = amz = 0;
-});
 
-document.getElementById("btn3").addEventListener("click", function () {
-    if(confirm("确定要清空音频缓存吗？清空后需要重新加载音频")){
-        clearAudioCache();
-        alert("清空完成！");
-        document.getElementById("cacheok").innerHTML = "💬";
+testButton.addEventListener("click", function () {
+    if (checkIfVisible()) {
+        objection();
     }
 });
 
-document.getElementById("lmd").addEventListener("input", function () {
-    window.lmd = document.getElementById("lmd").value;
-    localStorage.setItem("igiari_lmd", lmd);
-    let msg = lmd >= 20 ? "握紧设备！" : "平放于桌面";
-    document.getElementById("lmdv").innerHTML = `[${Number(lmd).toFixed(
+resetButton.addEventListener("click", function () {
+    if (checkIfVisible()) { amx = amy = amz = 0; }
+});
+
+clearCacheButton.addEventListener("click", function () {
+    if (checkIfVisible() && confirm("确定要清空音频缓存吗？清空后需要重新加载音频")) {
+        clearAudioCache();
+        alert("清空完成！");
+        cacheOk.innerHTML = "💬";
+    }
+});
+
+accuracy.addEventListener("input", function () {
+    window.accuracy = this.value;
+    localStorage.setItem("igiari_lmd", accuracy);
+    let msg = accuracy >= 20 ? "握紧设备！" : "平放于桌面";
+    document.getElementById("lmdv").innerHTML = `[${Number(accuracy).toFixed(
         1
     )}]&nbsp;&nbsp;${msg}`;
 });
 
 document.getElementById("obje-div").addEventListener("click", function () {
     if (new Date().getTime() - touchtime < 300) {
-        document.getElementById("title-div").classList.toggle("hide2");
-        document.getElementById("panel1").classList.toggle("hide2");
-        document.getElementById("9487616885").classList.toggle("hide2");
+        titleDiv.classList.toggle("hide2");
+        dashboard.classList.toggle("hide2");
+        audioPlayer.classList.toggle("hide2");
         if (
-            [...document.getElementById("panel1").classList].includes("hide2")
+            [...dashboard.classList].includes("hide2")
         ) {
-            localStorage.setItem("igiari_hide", 1);
+            sessionStorage.setItem("igiari_hide", 1);
+            character.disabled = true;
+            voiceType.disabled = true;
+            accuracy.disabled = true;
+            bilibiliLink.style.pointerEvents = "none";
+            githubLink.style.pointerEvents = "none";
+            autoMusic.disabled = true;
+            audioPlayer.style.pointerEvents = "none";
         } else {
-            localStorage.setItem("igiari_hide", 0);
+            sessionStorage.setItem("igiari_hide", 0);
+            character.disabled = false;
+            voiceType.disabled = false;
+            accuracy.disabled = false;
+            bilibiliLink.style.pointerEvents = "auto";
+            githubLink.style.pointerEvents = "auto";
+            autoMusic.disabled = false;
+            audioPlayer.style.pointerEvents = "auto";
         }
         // console.log("dblclick");
     } else {
@@ -302,51 +344,51 @@ document.getElementById("obje-div").addEventListener("click", function () {
     }
 });
 
-document.getElementById("character").addEventListener("change", (e) => {
-    window.selchar = document.getElementById("character").value;
+character.addEventListener("change", function(){
+    window.selchar = this.value;
     localStorage.setItem("igiari_char", selchar);
-    for (ele of document.getElementById("voicetype").options) {
+    for (ele of voiceType.options) {
         if (charvol[selchar].includes(ele.value)) {
             ele.disabled = false;
         } else {
             ele.disabled = true;
-            if (document.getElementById("voicetype").value === ele.value) {
+            if (voiceType.value === ele.value) {
                 selvol = charvol[selchar][0];
                 localStorage.setItem("igiari_vol", selvol);
-                document.getElementById("voicetype").value = selvol;
-                document.getElementById("img1").src = "img/" + selvol + ".png";
-                document.getElementById("cacheok").innerHTML = "💬";
+                voiceType.value = selvol;
+                image.src = "img/" + selvol + ".png";
+                cacheOk.innerHTML = "💬";
                 downloadAndCacheMP3("sound/" + selchar + "/" + selvol + ".mp3");
             }
         }
     }
-    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    let filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let mp3Key = `cachedMP3_${filename}`;
     let cachedMP3 = localStorage.getItem(mp3Key);
     if (cachedMP3) {
-        document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+        cacheOk.innerHTML = "✅";
+    } else {
         downloadAndCacheMP3(filename);
     }
 });
 
-document.getElementById("voicetype").addEventListener("change", (e) => {
-    window.selvol = document.getElementById("voicetype").value;
+voiceType.addEventListener("change", function () {
+    window.selvol = this.value;
     localStorage.setItem("igiari_vol", selvol);
-    document.getElementById("img1").src = "img/" + selvol + ".png";
-    document.getElementById("cacheok").innerHTML = "💬";
-    let filename="sound/" + selchar + "/" + selvol + ".mp3";
+    image.src = "img/" + selvol + ".png";
+    cacheOk.innerHTML = "💬";
+    let filename = "sound/" + selchar + "/" + selvol + ".mp3";
     let mp3Key = `cachedMP3_${filename}`;
     let cachedMP3 = localStorage.getItem(mp3Key);
     if (cachedMP3) {
-        document.getElementById("cacheok").innerHTML = "✅";
-    }else{
+        cacheOk.innerHTML = "✅";
+    } else {
         downloadAndCacheMP3(filename);
     }
 });
 
-document.getElementById("automusic").addEventListener("change", (e) => {
-    window.automusic = document.getElementById("automusic").checked;
+autoMusic.addEventListener("change", function () {
+    window.automusic = this.checked;
     localStorage.setItem("igiari_autom", automusic);
 });
 
@@ -354,10 +396,10 @@ function objection() {
     if (!inob) {
         try {
             clearTimeout(timer1);
-        } catch (e) {}
+        } catch (e) { }
         window.inob = true;
         setTimeout(() => {
-            document.getElementById("img1").classList.remove("hide");
+            image.classList.remove("hide");
             if (!device.ios()) {
                 window.navigator.vibrate(400);
             }
@@ -367,31 +409,31 @@ function objection() {
             setTimeout(() => {
                 try {
                     document.querySelector(".aplayer-play").click();
-                } catch (e) {}
+                } catch (e) { }
             }, 600);
         }
-        document.getElementById("btn1").disabled = true;
+        testButton.disabled = true;
         // document.getElementById("lmd").disabled = true;
-        document.getElementById("character").disabled = true;
-        document.getElementById("voicetype").disabled = true;
+        character.disabled = true;
+        voiceType.disabled = true;
         playMP3("sound/" + selchar + "/" + selvol + ".mp3");
         window.timer1 = setTimeout(() => {
             if (inob) {
-                document.getElementById("img1").classList.add("hide");
+                image.classList.add("hide");
                 // for (let ele of document.getElementsByName("vol")) {
                 //     if (ele.value <= 4) {
                 //         ele.disabled = false;
                 //     }
                 // }
-                document.getElementById("btn1").disabled = false;
+                testButton.disabled = false;
                 // document.getElementById("lmd").disabled = false;
-                document.getElementById("character").disabled = false;
-                document.getElementById("voicetype").disabled = false;
+                character.disabled = false;
+                voiceType.disabled = false;
                 window.inob = false;
             }
             try {
                 clearTimeout(timer1);
-            } catch (e) {}
+            } catch (e) { }
         }, 1300);
     }
 }
@@ -436,12 +478,12 @@ document.body.addEventListener("keydown", function (event) {
     if (event.ctrlKey && event.shiftKey && event.keyCode == 90) {
         event.preventDefault();
         if (!mousemode) {
-            document.getElementById("btn3").innerHTML = "停止";
+            clearCacheButton.innerHTML = "停止";
             window.mousemode = true;
             document.body.classList.add("hidecur");
             document.body.addEventListener("mousemove", objection);
         } else {
-            document.getElementById("btn3").innerHTML = "开始";
+            clearCacheButton.innerHTML = "开始";
             window.mousemode = false;
             document.body.classList.remove("hidecur");
             document.body.removeEventListener("mousemove", objection);
