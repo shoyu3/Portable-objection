@@ -131,11 +131,9 @@ const cacheOk = document.getElementById("cacheok");
 const sensOk = document.getElementById("sensok");
 
 var igiari_accuracy = localStorage.getItem("igiari_lmd") || 5;
-accuracy.value = accuracy;
+// accuracy.value = accuracy;
 let msg = accuracy >= 20 ? "握紧设备！" : "平放于桌面";
-document.getElementById("lmdv").innerHTML = `[${Number(accuracy).toFixed(
-    1
-)}]&nbsp;&nbsp;${msg}`;
+document.getElementById("lmdv").innerHTML = `[${Number(igiari_accuracy).toFixed(1)}]&nbsp;&nbsp;${msg}`;
 // document.getElementById("lmdv").innerHTML = lmd;
 var inob = false;
 var selchar = localStorage.getItem("igiari_char") || "cbt";
