@@ -350,10 +350,10 @@ clearCacheButton.addEventListener("click", function () {
 });
 
 accuracy.addEventListener("input", function () {
-    window.accuracy = this.value;
-    localStorage.setItem("igiari_lmd", accuracy);
+    window.igiari_accuracy = this.value;
+    localStorage.setItem("igiari_lmd", igiari_accuracy);
     let msg = accuracy >= 20 ? "握紧设备！" : "平放于桌面";
-    document.getElementById("lmdv").innerHTML = `[${Number(accuracy).toFixed(
+    document.getElementById("lmdv").innerHTML = `[${Number(igiari_accuracy).toFixed(
         1
     )}]&nbsp;&nbsp;${msg}`;
 });
