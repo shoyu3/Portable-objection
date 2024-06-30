@@ -163,8 +163,10 @@ try {
     for (ele of voiceType.options) {
         if (charvol[selchar].includes(ele.value)) {
             ele.disabled = false;
+            ele.style.display = "block";
         } else {
             ele.disabled = true;
+            ele.style.display = "none";
             if (voiceType.value === ele.value) {
                 selvol = charvol[selchar][0];
             }
@@ -395,8 +397,10 @@ character.addEventListener("change", function(){
     for (ele of voiceType.options) {
         if (charvol[selchar].includes(ele.value)) {
             ele.disabled = false;
+            ele.style.display = "block";
         } else {
             ele.disabled = true;
+            ele.style.display = "none";
             if (voiceType.value === ele.value) {
                 selvol = charvol[selchar][0];
                 localStorage.setItem("igiari_vol", selvol);
