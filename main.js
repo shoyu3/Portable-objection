@@ -318,9 +318,9 @@ function dm(event) {
         2
     )}, ${amy.toFixed(2)}, ${amz.toFixed(2)}`;
     if (
-        Math.abs(accx) >= accuracy ||
-        Math.abs(accy) >= accuracy ||
-        Math.abs(accz) >= accuracy
+        Math.abs(accx) >= igiari_accuracy ||
+        Math.abs(accy) >= igiari_accuracy ||
+        Math.abs(accz) >= igiari_accuracy
     ) {
         objection();
     }
