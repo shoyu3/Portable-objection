@@ -87,7 +87,7 @@ var charvol = {
     ],
     xun: [
         "igiari",
-        "damarina",
+        "damarinaa",
         "objection",
         "silence",
         "fandui",
